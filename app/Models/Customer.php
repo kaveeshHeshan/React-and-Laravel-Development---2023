@@ -11,7 +11,7 @@ class Customer extends Model
 
     protected $table = "customers";
 
-    public $timestamps = false;
+    public $timestamps = true;
 
     protected $fillable = ["customer_id", "full_name", "date_of_birth", "loan_balance","used_amount", "installment_plan"];
 }

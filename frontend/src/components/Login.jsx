@@ -13,31 +13,6 @@ const Login = () => {
     const [redirectProfile, setRedirectProfile] = useState(false);
     const [error, setError] = useState({});
 
-    // const handleForm = (e) => {
-    //     e.preventDefault();
-    //     const data = {
-    //         email: email,
-    //         password: password,
-    //     }
-    //     // axios.post("http://127.0.0.1:8000/api/auth/login", data)
-    //     //     .then(res => {
-    //     //         cookie.set('token', res.data.access_token);
-    //     //         cookie.set('user', res.data.user);
-    //     //         setRedirectProfile(true);
-    //     //     })
-    //     //     .catch(e =>
-    //     //         // console.log(e.response.data)
-    //     //         setErrors(e.response.data)
-
-    //     //     );
-
-    // }
-
-    // if (redirectProfile) {
-    //     console.log(redirectProfile);
-    //     return <Navigate to="/dashboard" />;
-    // }
-
     const onSubmit = (ev) => {
         ev.preventDefault();
 
@@ -45,20 +20,7 @@ const Login = () => {
             email: email,
             password: password,
         }
-        // axios.post("http://127.0.0.1:8000/api/auth/login", data)
-        //     .then(res => {
-        //         setCurrentUser(res.data.user)
-        //         setUserToken(res.data.access_token)
-        //         // console.log(res.data.access_token);
-        //         // cookie.set('token', res.data.access_token);
-        //         // cookie.set('user', res.data.user);
-        //         // setRedirectProfile(true);
-        //     })
-        //     .catch(e =>
-        //         // console.log(e.response.data)
-        //         setError(e.response.data)
 
-        //     );
         AxiosClient.post('auth/login', data)
             .then(res => {
                 setCurrentUser(res.data.user)

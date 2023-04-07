@@ -1,18 +1,58 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useStateContext } from '../contexts/ContextProvider';
+import AxiosClient from '../AxiosClient';
 
 const Register = () => {
+
+    const { setCurrentUser, setUserToken } = useStateContext();
+
+    const [fullName, setFullName] = useState('');
+    const [email, setEmail] = useState('');
+    const [dateOfBirth, setDateOfBirth] = useState('');
+    const [password, setPassword] = useState('');
+    const [redirectProfile, setRedirectProfile] = useState(false);
+    const [error, setError] = useState('');
+
+    const onSubmit = (ev) => {
+        ev.preventDefault();
+
+        let formattedDateOfBirth = new Date(dateOfBirth).toString('yyyy/M/d');
+
+        console.log(formattedDateOfBirth);
+
+        const registerData = {
+            full_name: fullName,
+            email: email,
+            date_of_birth: formattedDateOfBirth,
+            password: password,
+        }
+
+        AxiosClient.post('auth/register', registerData)
+            .then(res => {
+                console.log(res);
+                setCurrentUser(res.data.user)
+                setUserToken(res.data.access_token)
+            })
+            .catch(e =>
+                setError(e.response.data.message)
+            );
+
+    }
+
     return (
         <div className='py-5 px-5'>
-            <form className="form-signin">
+            <form className="form-signin" onSubmit={onSubmit}>
                 <h1 className="h3 mb-3 font-weight-normal">Please Sign Up</h1>
-                <input type="text" id="inputName" className="form-control m-2" placeholder="Full Name" required autoFocus />
-                <input type="email" id="inputEmail" className="form-control m-2" placeholder="Email address" required autofocus />
+                {/* Error message view */}
+                {error ? (<p className='alert alert-danger'>{error}</p>) : ("")}
+                <input type="text" id="inputName" className="form-control m-2" placeholder="Full Name" autoFocus onChange={(e) => setFullName(e.target.value)} />
+                <input type="email" id="inputEmail" className="form-control m-2" placeholder="Email address" autofocus onChange={(e) => setEmail(e.target.value)} />
 
-                <input type="date" id="inputDate" className="form-control m-2" placeholder="Birth Day" required autofocus />
+                <input type="date" id="inputDate" className="form-control m-2" placeholder="Birth Day" autofocus onChange={(e) => setDateOfBirth(e.target.value)} />
 
 
-                <input type="password" id="inputPassword" className="form-control m-2" placeholder="Password" required />
+                <input type="password" id="inputPassword" className="form-control m-2" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
                 <div className="checkbox mb-3">
                     <label>
                         <input type="checkbox" value="remember-me" /> Remember me

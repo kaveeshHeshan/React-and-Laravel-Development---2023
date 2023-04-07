@@ -58,7 +58,7 @@ class AuthController extends Controller
             'full_name' => 'required',
             'email' => 'required|email',
             'password' => 'required|string|min:6|max:50',
-            'date_of_birth' => 'required|date|date_format:Y/m/d|before:today',
+            'date_of_birth' => 'required|date|before:today',
         ]);
 
         if ($validator->fails()) {
