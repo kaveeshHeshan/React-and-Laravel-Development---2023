@@ -11,7 +11,10 @@ class ProductsController extends Controller
     // Get all products
     public function getAllProducts()
     {
-        return Product::all();
+        $products = Product::all();
+        return response()->json([
+            'products' => $products,
+        ])->setStatusCode(200);
     }
 
     // Store a new Product

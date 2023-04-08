@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -69,20 +70,21 @@ class AuthController extends Controller
 
         $id = 'CU'.date('md').mt_rand(10000,99999);
 
-        $customer_data = [
-            'customer_id' => $id,
-            'full_name' => $request->full_name,
-            'date_of_birth' => $request->date_of_birth,
-        ];
-
-        $customer = Customer::create($customer_data);
-
         $user = User::create([
             'user_id' => $id,
             'name' => $request->full_name,
             'email' => $request->email,
             'password' => Hash::make($request->password)
         ]);
+
+        $customer_data = [
+            'user_id' => $user->id,
+            'customer_id' => $id,
+            'full_name' => $request->full_name,
+            'date_of_birth' => $request->date_of_birth,
+        ];
+
+        $customer = Customer::create($customer_data);
 
         if( !$customer || !$user )
         {
@@ -118,7 +120,22 @@ class AuthController extends Controller
      */
     public function me()
     {
-        return response()->json(auth()->user());
+        $user = auth()->user();
+
+        if ($user->hasRole('admin')) {
+            $userRole = 'admin';
+            return response()->json([
+                'user' => $user,
+                'user_role' => $userRole,
+            ]);
+        } else {
+            $userRole = 'customer';
+            return response()->json([
+                'user' => $user,
+                'other' => auth()->user()->customerData,
+                'user_role' => $userRole,
+            ]);
+        }
     }
 
     /**
@@ -152,11 +169,21 @@ class AuthController extends Controller
      */
     protected function respondWithToken($token)
     {
+        $user = auth()->user();
+
+        if ($user->hasRole('admin')) {
+            $userRole = 'admin';
+        } else {
+            $userRole = 'customer';
+        }
+
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => auth()->factory()->getTTL() * 60,
-            'user' => auth()->user()
+            'user' => auth()->user(),
+            'user_role' => $userRole,
         ]);
     }
+
 }

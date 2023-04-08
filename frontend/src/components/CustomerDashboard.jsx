@@ -3,11 +3,9 @@ import { Link, Navigate } from 'react-router-dom';
 import { useStateContext } from '../contexts/ContextProvider';
 import AxiosClient from '../AxiosClient';
 
-const AdminDashboard = () => {
+const CustomerDashboard = () => {
 
     const { currentUser, userToken, currentUserRole, setCurrentUser, setUserToken } = useStateContext();
-
-    console.log(currentUserRole)
 
 
     const hadleSignOut = (e) => {
@@ -104,23 +102,9 @@ const AdminDashboard = () => {
                         </li>
 
                         <li className="menu-item">
-                            <Link to="/profile" className="menu-link">
+                            <Link to="/customer/profile" className="menu-link">
                                 <i className="menu-icon tf-icons bx bx-user"></i>
                                 <div data-i18n="Analytics">Profile</div>
-                            </Link>
-                        </li>
-
-                        <li className="menu-item">
-                            <Link to="/admin/products" className="menu-link">
-                                <i className="menu-icon tf-icons bx bx-package"></i>
-                                <div data-i18n="Analytics">Products</div>
-                            </Link>
-                        </li>
-
-                        <li className="menu-item">
-                            <Link to="/admin/customers" className="menu-link">
-                                <i className="menu-icon tf-icons bx bx-user-pin"></i>
-                                <div data-i18n="Analytics">Customers</div>
                             </Link>
                         </li>
                     </ul>
@@ -187,13 +171,13 @@ const AdminDashboard = () => {
                                             <div className="dropdown-divider"></div>
                                         </li>
                                         <li>
-                                            <a className="dropdown-item" href="#">
+                                            <Link className="dropdown-item" to="/customer/profile">
                                                 <i className="bx bx-user me-2"></i>
                                                 <span className="align-middle">My Profile</span>
-                                            </a>
+                                            </Link>
                                         </li>
                                         <li>
-                                            <Link className="dropdown-item" to="/admin/dashboard">
+                                            <Link className="dropdown-item" to="/customer/dashboard">
                                                 <i className="bx bxs-dashboard me-2"></i>
                                                 <span className="align-middle">Dashboard</span>
                                             </Link>
@@ -222,7 +206,33 @@ const AdminDashboard = () => {
 
                         <div className="container-xxl flex-grow-1 container-p-y">
                             <div className="row">
-                                <h1>Dashboard</h1>
+                                <div className="col-lg-12 mb-4 order-0">
+                                    <div className="card">
+                                        <div className="d-flex align-items-end row">
+                                            <div className="col-sm-7">
+                                                <div className="card-body">
+                                                    <h5 className="card-title text-primary">Welcome to the BumbleBee Dashboard John! 🎉</h5>
+                                                    <p className="mb-4">
+                                                        Use the side panel to check your profile.
+                                                    </p>
+
+                                                    <Link to="/customer/profile" className="btn btn-sm btn-outline-primary">View Profile</Link>
+                                                </div>
+                                            </div>
+                                            <div className="col-sm-5 text-center text-sm-left">
+                                                <div className="card-body pb-0 px-0 px-md-4">
+                                                    <img
+                                                        src="../assets/img/illustrations/man-with-laptop-light.png"
+                                                        height="140"
+                                                        alt="View Badge User"
+                                                        data-app-dark-img="illustrations/man-with-laptop-dark.png"
+                                                        data-app-light-img="illustrations/man-with-laptop-light.png"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                         </div>
@@ -240,4 +250,4 @@ const AdminDashboard = () => {
     )
 }
 
-export default AdminDashboard
+export default CustomerDashboard

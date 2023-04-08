@@ -5,21 +5,19 @@ import AxiosClient from '../AxiosClient';
 
 const Register = () => {
 
-    const { setCurrentUser, setUserToken } = useStateContext();
+    const { setCurrentUser, setUserToken, setCurrentUserRole } = useStateContext();
 
     const [fullName, setFullName] = useState('');
     const [email, setEmail] = useState('');
     const [dateOfBirth, setDateOfBirth] = useState('');
     const [password, setPassword] = useState('');
-    const [redirectProfile, setRedirectProfile] = useState(false);
+    // const [redirectProfile, setRedirectProfile] = useState(false);
     const [error, setError] = useState('');
 
     const onSubmit = (ev) => {
         ev.preventDefault();
 
         let formattedDateOfBirth = new Date(dateOfBirth).toString('yyyy/M/d');
-
-        console.log(formattedDateOfBirth);
 
         const registerData = {
             full_name: fullName,
@@ -30,9 +28,10 @@ const Register = () => {
 
         AxiosClient.post('auth/register', registerData)
             .then(res => {
-                console.log(res);
+                console.log(res.data.user_role)
                 setCurrentUser(res.data.user)
                 setUserToken(res.data.access_token)
+                setCurrentUserRole(res.data.user_role)
             })
             .catch(e =>
                 setError(e.response.data.message)

@@ -4,10 +4,12 @@ import { useStateContext } from '../contexts/ContextProvider';
 
 const GuestLayout = () => {
 
-    const { currentUser, userToken } = useStateContext();
+    const { currentUser, userToken, currentUserRole } = useStateContext();
 
-    if (userToken) {
+    if (userToken && currentUserRole == 'admin') {
         return <Navigate to='/admin/dashboard' />
+    } else if (userToken && currentUserRole == 'customer') {
+        return <Navigate to='/customer/dashboard' />
     }
 
     return (

@@ -13,5 +13,18 @@ class Customer extends Model
 
     public $timestamps = true;
 
-    protected $fillable = ["customer_id", "full_name", "date_of_birth", "loan_balance","used_amount", "installment_plan"];
+    protected $fillable = [
+        "customer_id", 
+        "full_name", 
+        "date_of_birth", 
+        "loan_balance",
+        "used_amount", 
+        "installment_plan"
+    ];
+
+    // fetch related auth data
+    public function userData()
+    {
+        return $this->belongsTo('App\Models\User', 'user_id', 'id');
+    }
 }

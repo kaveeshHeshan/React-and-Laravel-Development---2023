@@ -32,3 +32,15 @@ Route::group([
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::middleware('auth:api')->group(function () {
+    
+    // Customers
+    Route::get('customers', 'CustomerController@getAllCustomers');
+    
+
+});
+
+Route::post('admin/profile/update', 'CustomerController@adminProfileUpdate');
+Route::post('customer/profile/update', 'CustomerController@customerProfileUpdate');
+Route::post('password/update', 'CustomerController@passwordUpdate');

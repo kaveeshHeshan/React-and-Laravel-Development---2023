@@ -1,27 +1,25 @@
-import React from 'react'
-import { Link, Navigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Navigate, Link } from 'react-router-dom';
 import { useStateContext } from '../contexts/ContextProvider';
 import AxiosClient from '../AxiosClient';
+// import axios from 'axios';
+// import cookie from 'js-cookie';
 
-const AdminDashboard = () => {
+const Customers = () => {
 
-    const { currentUser, userToken, currentUserRole, setCurrentUser, setUserToken } = useStateContext();
+    const { currentUser, customers } = useStateContext();
 
-    console.log(currentUserRole)
+    const [customerList, setCustomerList] = useState([]);
 
-
-    const hadleSignOut = (e) => {
-        e.preventDefault();
-        AxiosClient.post("auth/logout").then((res) => {
-            setCurrentUser({});
-            setUserToken(null);
-        });
-
-    }
-
-    if (!userToken) {
-        return <Navigate to='/' />
-    }
+    useEffect(() => {
+        AxiosClient.get("customers").then(res => {
+            setCustomerList(res.data.customers);
+            // console.log(res.data.customers);
+        })
+            .catch(e =>
+                setError(e.response.data.message)
+            );
+    }, [])
 
     return (
         <div className="layout-wrapper layout-content-navbar">
@@ -96,8 +94,8 @@ const AdminDashboard = () => {
 
                     <ul className="menu-inner py-1">
                         {/* <!-- Dashboard --> */}
-                        <li className="menu-item active">
-                            <Link to="/admin/dashoard" className="menu-link">
+                        <li className="menu-item">
+                            <Link to="/admin/dashboard" className="menu-link">
                                 <i className="menu-icon tf-icons bx bxs-dashboard"></i>
                                 <div data-i18n="Analytics">Dashboard</div>
                             </Link>
@@ -117,7 +115,7 @@ const AdminDashboard = () => {
                             </Link>
                         </li>
 
-                        <li className="menu-item">
+                        <li className="menu-item active">
                             <Link to="/admin/customers" className="menu-link">
                                 <i className="menu-icon tf-icons bx bx-user-pin"></i>
                                 <div data-i18n="Analytics">Customers</div>
@@ -202,10 +200,10 @@ const AdminDashboard = () => {
                                             <div className="dropdown-divider"></div>
                                         </li>
                                         <li>
-                                            <button className="dropdown-item" onClick={hadleSignOut}>
+                                            <a className="dropdown-item" href="auth-login-basic.html">
                                                 <i className="bx bx-power-off me-2"></i>
                                                 <span className="align-middle">Log Out</span>
-                                            </button>
+                                            </a>
                                         </li>
                                     </ul>
                                 </li>
@@ -222,7 +220,55 @@ const AdminDashboard = () => {
 
                         <div className="container-xxl flex-grow-1 container-p-y">
                             <div className="row">
-                                <h1>Dashboard</h1>
+                                {/* <!-- Bootstrap Table with Header - Light --> */}
+                                <div class="card pb-5 px-4">
+                                    <h5 class="card-header">Customers</h5>
+                                    <div class="table-responsive text-nowrap">
+                                        <table class="table">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th>Image</th>
+                                                    <th>Name</th>
+                                                    <th>Loan Balance (Rs.)</th>
+                                                    <th>Used Amount (Rs.)</th>
+                                                    <th>Installment Plan</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="table-border-bottom-0">
+                                                {
+                                                    customerList.map(customer => (
+                                                        <tr>
+                                                            <td className='avatar avatar-lg pull-up'><img src="../assets/img/avatars/6.png" alt="Avatar" class="rounded-circle" /></td>
+                                                            <td>{customer.full_name}</td>
+                                                            <td>{customer.loan_balance}</td>
+                                                            <td>{customer.used_amount}</td>
+                                                            <td>{customer.installment_plan}</td>
+                                                            <td>
+                                                                <div class="dropdown">
+                                                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                                                        <i class="bx bx-dots-vertical-rounded"></i>
+                                                                    </button>
+                                                                    <div class="dropdown-menu">
+                                                                        <Link class="dropdown-item" to={`/admin/products/${customer.id}`}
+                                                                        >
+                                                                            <i class="bx bx-edit-alt me-1"></i>
+                                                                            Edit
+                                                                        </Link>
+                                                                        <a class="dropdown-item text-danger" href="javascript:void(0);"
+                                                                        ><i class="bx bx-trash me-1"></i> Delete
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    ))
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                {/* <!-- Bootstrap Table with Header - Light --> */}
                             </div>
 
                         </div>
@@ -240,4 +286,4 @@ const AdminDashboard = () => {
     )
 }
 
-export default AdminDashboard
+export default Customers

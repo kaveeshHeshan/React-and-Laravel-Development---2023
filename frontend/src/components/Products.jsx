@@ -42,7 +42,7 @@ const Products = () => {
                                             id="path-5"
                                         ></path>
                                     </defs>
-                                    <g id="g-app-brand" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                    <g id="g-app-brand" stroke="none" strokeWidth="1" fill="none" fill-rule="evenodd">
                                         <g id="Brand-Logo" transform="translate(-27.000000, -15.000000)">
                                             <g id="Icon" transform="translate(27.000000, 15.000000)">
                                                 <g id="Mask" transform="translate(0.000000, 8.000000)">
@@ -101,6 +101,13 @@ const Products = () => {
                             <Link to="/admin/products" className="menu-link">
                                 <i className="menu-icon tf-icons bx bx-package"></i>
                                 <div data-i18n="Analytics">Products</div>
+                            </Link>
+                        </li>
+
+                        <li className="menu-item">
+                            <Link to="/admin/customers" className="menu-link">
+                                <i className="menu-icon tf-icons bx bx-user-pin"></i>
+                                <div data-i18n="Analytics">Customers</div>
                             </Link>
                         </li>
                     </ul>

@@ -5,6 +5,9 @@ import Login from './components/Login';
 import Register from './components/Register';
 import Products from "./components/Products";
 import Profile from "./components/Profile";
+import Customers from "./components/Customers";
+import CustomerDashboard from "./components/CustomerDashboard";
+import CustomerProfile from "./components/CustomerProfile";
 
 const router = createBrowserRouter([
 
@@ -13,12 +16,24 @@ const router = createBrowserRouter([
         element: <AdminDashboard />,
     },
     {
+        path: '/customer/dashboard',
+        element: <CustomerDashboard />
+    },
+    {
         path: '/admin/products',
         element: <Products />,
     },
     {
+        path: '/admin/customers',
+        element: <Customers />,
+    },
+    {
         path: '/profile',
         element: <Profile />,
+    },
+    {
+        path: '/customer/profile',
+        element: <CustomerProfile />,
     },
     {
         path: '/',

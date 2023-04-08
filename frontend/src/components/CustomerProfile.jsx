@@ -5,21 +5,24 @@ import AxiosClient from '../AxiosClient';
 // import axios from 'axios';
 // import cookie from 'js-cookie';
 
-const Profile = () => {
+const CustomerProfile = () => {
 
     const { currentUser, userToken, setCurrentUser, setUserToken } = useStateContext();
 
     useEffect(() => {
         AxiosClient.post("auth/me").then(res => {
-            setCurrentUser(res.data.user)
-            // console.log(res.data.user);
-
+            setCurrentUser(res.data.user);
         })
             .catch(e =>
                 // setError(e.response.data.message)
                 console.log(e)
             );
     }, [])
+
+    const [fullName, setFullName] = useState(currentUser.name || '');
+    const [email, setEmail] = useState(currentUser.email || '');
+    const [password, setPassword] = useState('');
+    const [passwordConfirmation, setPasswordConfirmation] = useState('');
 
     const hadleSignOut = (e) => {
         e.preventDefault();
@@ -30,17 +33,12 @@ const Profile = () => {
 
     }
 
-    const [fullName, setFullName] = useState(currentUser.name || '');
-    const [email, setEmail] = useState(currentUser.email || '');
-    const [password, setPassword] = useState('');
-    const [passwordConfirmation, setPasswordConfirmation] = useState('');
-
     const handleProfileInfoForm = (ev) => {
         ev.preventDefault();
 
         $.ajax({
             type: 'POST',
-            url: 'http://127.0.0.1:8000/api/admin/profile/update',
+            url: 'http://127.0.0.1:8000/api/customer/profile/update',
             data: {
                 user_id: currentUser.id,
                 fullName: fullName || currentUser.name,
@@ -253,31 +251,16 @@ const Profile = () => {
                     <ul className="menu-inner py-1">
                         {/* <!-- Dashboard --> */}
                         <li className="menu-item">
-                            <Link to="/admin/dashboard" className="menu-link">
+                            <Link to="/customer/dashboard" className="menu-link">
                                 <i className="menu-icon tf-icons bx bxs-dashboard"></i>
                                 <div data-i18n="Analytics">Dashboard</div>
                             </Link>
                         </li>
 
                         <li className="menu-item active">
-                            <Link to="/profile" className="menu-link">
+                            <Link to="/customer/profile" className="menu-link">
                                 <i className="menu-icon tf-icons bx bx-user"></i>
                                 <div data-i18n="Analytics">Profile</div>
-                            </Link>
-                        </li>
-
-
-                        <li className="menu-item">
-                            <Link to="/admin/products" className="menu-link">
-                                <i className="menu-icon tf-icons bx bx-package"></i>
-                                <div data-i18n="Analytics">Products</div>
-                            </Link>
-                        </li>
-
-                        <li className="menu-item">
-                            <Link to="/admin/customers" className="menu-link">
-                                <i className="menu-icon tf-icons bx bx-user-pin"></i>
-                                <div data-i18n="Analytics">Customers</div>
                             </Link>
                         </li>
                     </ul>
@@ -344,10 +327,10 @@ const Profile = () => {
                                             <div className="dropdown-divider"></div>
                                         </li>
                                         <li>
-                                            <a className="dropdown-item" href="#">
+                                            <Link className="dropdown-item" to="/customer/profile">
                                                 <i className="bx bx-user me-2"></i>
                                                 <span className="align-middle">My Profile</span>
-                                            </a>
+                                            </Link>
                                         </li>
                                         <li>
                                             <Link className="dropdown-item" to="/admin/dashboard">
@@ -416,14 +399,22 @@ const Profile = () => {
                                                     </div>
                                                 </div>
                                                 {/* <div class="row mb-3">
-                                                    <label class="col-sm-2 col-form-label" for="basic-default-name">Password</label>
+                                                    <label class="col-sm-2 col-form-label" for="basic-default-phone">Date of Birth</label>
                                                     <div class="col-sm-10">
-                                                        <input type="password" class="form-control" id="basic-default-name" />
+                                                        <input
+                                                            type="text"
+                                                            id="basic-default-phone"
+                                                            class="form-control phone-mask"
+                                                            placeholder="658 799 8941"
+                                                            aria-label="658 799 8941"
+                                                            aria-describedby="basic-default-phone"
+                                                        // value={customerData.date_of_birth}
+                                                        />
                                                     </div>
                                                 </div> */}
                                                 <div class="row justify-content-end">
                                                     <div class="col-sm-10">
-                                                        <button type="submit" class="btn btn-primary">Update Profile info</button>
+                                                        <button type="submit" class="btn btn-primary">Update Profile Info</button>
                                                     </div>
                                                 </div>
                                             </form>
@@ -433,7 +424,6 @@ const Profile = () => {
                                 {/* <!-- Basic with Icons --> */}
 
                             </div>
-
                             <div class="row">
                                 {/* <!-- Basic Layout --> */}
                                 <div class="col-xxl">
@@ -483,4 +473,4 @@ const Profile = () => {
     )
 }
 
-export default Profile
+export default CustomerProfile

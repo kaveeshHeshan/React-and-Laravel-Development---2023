@@ -3,9 +3,12 @@ import { createContext, useContext, useState } from "react";
 const StateContext = createContext({
     currentUser: {},
     userToken: null,
+    currentUserRole: null,
     products: [],
+    customers: [],
     setCurrentUser: () => { },
-    setUserToken: () => { }
+    setUserToken: () => { },
+    setCurrentUserRole: () => { }
 })
 
 const temProducts = [
@@ -41,10 +44,30 @@ const temProducts = [
     },
 ]
 
+const tempCustomers = [
+    {
+        "id": 1,
+        "customer_id": "C1234",
+        "name": "Deon",
+    },
+    {
+        "id": 1,
+        "customer_id": "C1234",
+        "name": "Deon",
+    },
+    {
+        "id": 1,
+        "customer_id": "C1234",
+        "name": "Deon",
+    },
+]
+
 export const ContextProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState({});
     const [userToken, _setUserToken] = useState(localStorage.getItem('TOKEN') || '');
+    const [currentUserRole, setCurrentUserRole] = useState('');
     const [products, setProducts] = useState(temProducts);
+    const [customers, setCustomers] = useState(tempCustomers);
 
     const setUserToken = (token) => {
         if (token) {
@@ -61,7 +84,10 @@ export const ContextProvider = ({ children }) => {
             setCurrentUser,
             userToken,
             setUserToken,
-            products
+            currentUserRole,
+            setCurrentUserRole,
+            products,
+            customers
         }}>
             {children}
         </StateContext.Provider>

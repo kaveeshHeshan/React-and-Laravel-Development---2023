@@ -6,35 +6,42 @@ import { useStateContext } from '../contexts/ContextProvider';
 // import cookie from 'js-cookie';
 
 const Login = () => {
-    const { setCurrentUser, setUserToken } = useStateContext();
+    const { setCurrentUser, setUserToken, setCurrentUserRole } = useStateContext();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [redirectProfile, setRedirectProfile] = useState(false);
-    const [error, setError] = useState({});
+    const [error, setError] = useState('');
 
     const onSubmit = (ev) => {
         ev.preventDefault();
 
-        const data = {
+        const loginData = {
             email: email,
             password: password,
         }
 
-        AxiosClient.post('auth/login', data)
+        AxiosClient.post('auth/login', loginData)
             .then(res => {
+                console.log(res.data.user_role)
                 setCurrentUser(res.data.user)
                 setUserToken(res.data.access_token)
-                // console.log(res.data.access_token);
-                // cookie.set('token', res.data.access_token);
-                // cookie.set('user', res.data.user);
-                // setRedirectProfile(true);
+                setCurrentUserRole(res.data.user_role)
             })
             .catch(e =>
-                // console.log(e.response.data)
-                setError(e.response.data)
-
+                // console.log(e.response.data.message)
+                setError(e.response.data.message)
             );
+        // AxiosClient.post('auth/login', data)
+        //     .then(res => {
+        //         setCurrentUser(res.data.user)
+        //         setUserToken(res.data.access_token)
+        //         setCurrentUserRole(res.data.user_role)
+        //     })
+        //     .catch(e =>
+        //         console.log(e)
+        //         // setError(e)
+
+        //     );
 
     }
 
@@ -44,7 +51,7 @@ const Login = () => {
                 <h1 className="h3 mb-3 font-weight-normal">Please sign in</h1>
 
                 {/* Error message view */}
-                {error.errors ? (<p className='alert alert-danger'>{error.errors}</p>) : ("")}
+                {error ? (<p className='alert alert-danger'>{error}</p>) : ("")}
 
                 <input type="email" id="inputEmail" className="form-control m-2" placeholder="Email address" autoFocus onChange={(e) => setEmail(e.target.value)} />
                 <input type="password" id="inputPassword" className="form-control m-2" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
